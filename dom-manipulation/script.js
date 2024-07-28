@@ -196,6 +196,9 @@ async function syncQuotesWithServer() {
   // Update UI
   populateCategories();
   showRandomQuote();
+
+  // Notify user about the sync
+  notifyUser("Quotes synchronized with server.");
 }
 
 // Resolve conflicts between server and local quotes
@@ -209,7 +212,7 @@ function resolveConflicts(serverQuotes, localQuotes) {
       const localQuote = localQuotesMap.get(serverQuote.text);
       if (localQuote.category !== serverQuote.category) {
         notifyUser(
-          `Conflict detected for quote: "${serverQuote.text}" - Using server data.`
+          `Conflict detected for quote: "${serverQuote.text}". Server data used.`
         );
         localQuotesMap.set(serverQuote.text, serverQuote);
       }
@@ -266,7 +269,7 @@ async function postQuoteToServer(quote) {
         userId: 1,
       }),
       headers: {
-        "Content-type": "application/json; charset=UTF-8",
+        "Content-Type": "application/json; charset=UTF-8", // Ensure correct content type
       },
     });
     if (response.ok) {
