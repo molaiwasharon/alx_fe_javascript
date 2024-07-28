@@ -19,7 +19,9 @@ function showRandomQuote() {
   const randomIndex = Math.floor(Math.random() * quotes.length);
   const randomQuote = quotes[randomIndex];
   const quoteDisplay = document.getElementById("quoteDisplay");
-  quoteDisplay.textContent = `"${randomQuote.text}" - Category: ${randomQuote.category}`;
+
+  // Update the DOM using innerHTML
+  quoteDisplay.innerHTML = `<p>"${randomQuote.text}"</p><p><strong>Category:</strong> ${randomQuote.category}</p>`;
 }
 
 // Function to add a new quote
@@ -33,7 +35,13 @@ function addQuote() {
     quotes.push({ text: newQuoteText, category: newQuoteCategory });
     document.getElementById("newQuoteText").value = "";
     document.getElementById("newQuoteCategory").value = "";
+
+    // Display feedback to the user
     alert("Quote added successfully!");
+
+    // Optionally, display the newly added quote immediately
+    const quoteDisplay = document.getElementById("quoteDisplay");
+    quoteDisplay.innerHTML = `<p>"${newQuoteText}"</p><p><strong>Category:</strong> ${newQuoteCategory}</p>`;
   } else {
     alert("Please enter both quote text and category.");
   }
