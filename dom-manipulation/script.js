@@ -1,7 +1,7 @@
 // script.js
 
-// Initial array of quote objects
-const quotes = [
+// Load quotes from local storage or use default quotes
+const defaultQuotes = [
   {
     text: "The only limit to our realization of tomorrow is our doubts of today.",
     category: "Motivation",
@@ -13,6 +13,14 @@ const quotes = [
   { text: "The purpose of our lives is to be happy.", category: "Happiness" },
   { text: "Get busy living or get busy dying.", category: "Motivation" },
 ];
+
+// Load quotes from local storage or set default quotes
+let quotes = JSON.parse(localStorage.getItem("quotes")) || defaultQuotes;
+
+// Function to save quotes to local storage
+function saveQuotes() {
+  localStorage.setItem("quotes", JSON.stringify(quotes));
+}
 
 // Function to show a random quote
 function showRandomQuote() {
@@ -33,6 +41,9 @@ function showRandomQuote() {
   // Append elements to the quote display
   quoteDisplay.appendChild(quoteText);
   quoteDisplay.appendChild(quoteCategory);
+
+  // Save last viewed quote to session storage
+  sessionStorage.setItem("lastViewedQuote", JSON.stringify(randomQuote));
 }
 
 // Function to create the form for adding quotes
@@ -73,6 +84,9 @@ function addQuote() {
   if (newQuoteText && newQuoteCategory) {
     quotes.push({ text: newQuoteText, category: newQuoteCategory });
 
+    // Save updated quotes to local storage
+    saveQuotes();
+
     // Clear input fields
     document.getElementById("newQuoteText").value = "";
     document.getElementById("newQuoteCategory").value = "";
@@ -85,11 +99,61 @@ function addQuote() {
   }
 }
 
+// Function to export quotes to JSON
+function exportToJsonFile() {
+  const dataStr = JSON.stringify(quotes, null, 2);
+  const dataBlob = new Blob([dataStr], { type: "application/json" });
+  const url = URL.createObjectURL(dataBlob);
+
+  const downloadLink = document.createElement("a");
+  downloadLink.href = url;
+  downloadLink.download = "quotes.json";
+  downloadLink.click();
+
+  // Release URL after downloading
+  URL.revokeObjectURL(url);
+}
+
+// Function to import quotes from a JSON file
+function importFromJsonFile(event) {
+  const fileReader = new FileReader();
+  fileReader.onload = function (event) {
+    try {
+      const importedQuotes = JSON.parse(event.target.result);
+
+      if (Array.isArray(importedQuotes)) {
+        quotes.push(...importedQuotes);
+        saveQuotes();
+        alert("Quotes imported successfully!");
+        showRandomQuote();
+      } else {
+        throw new Error("Invalid format");
+      }
+    } catch (error) {
+      alert("Failed to import quotes: " + error.message);
+    }
+  };
+  fileReader.readAsText(event.target.files[0]);
+}
+
 // Event listener for the "Show New Quote" button
 document.getElementById("newQuote").addEventListener("click", showRandomQuote);
 
+// Event listener for the "Export Quotes to JSON" button
+document
+  .getElementById("exportJson")
+  .addEventListener("click", exportToJsonFile);
+
 // Initialize the application
 window.onload = function () {
-  showRandomQuote(); // Show a random quote on load
+  // Display the last viewed quote from session storage, if available
+  const lastViewedQuote = JSON.parse(sessionStorage.getItem("lastViewedQuote"));
+  if (lastViewedQuote) {
+    const quoteDisplay = document.getElementById("quoteDisplay");
+    quoteDisplay.innerHTML = `<p>"${lastViewedQuote.text}"</p><p><strong>Category:</strong> ${lastViewedQuote.category}</p>`;
+  } else {
+    showRandomQuote(); // Show a random quote on load
+  }
+
   createAddQuoteForm(); // Create the form for adding new quotes
 };

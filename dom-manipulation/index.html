@@ -24,6 +24,7 @@
         color: white;
         border-radius: 5px;
         cursor: pointer;
+        margin: 5px;
       }
       button:hover {
         background-color: #0056b3;
@@ -34,6 +35,9 @@
         border: 1px solid #ccc;
         border-radius: 5px;
       }
+      input[type="file"] {
+        margin: 5px;
+      }
     </style>
   </head>
   <body>
@@ -41,7 +45,16 @@
     <div id="quoteDisplay">Press "Show New Quote" to display a quote.</div>
     <button id="newQuote">Show New Quote</button>
     <div id="addQuoteForm"></div>
-    <!-- Placeholder for adding new quotes -->
+
+    <!-- JSON Import/Export Buttons -->
+    <input
+      type="file"
+      id="importFile"
+      accept=".json"
+      onchange="importFromJsonFile(event)"
+    />
+    <button id="exportJson">Export Quotes to JSON</button>
+
     <script src="script.js"></script>
   </body>
 </html>
