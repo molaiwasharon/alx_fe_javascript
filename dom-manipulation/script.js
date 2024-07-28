@@ -20,25 +20,47 @@ function showRandomQuote() {
   const randomQuote = quotes[randomIndex];
   const quoteDisplay = document.getElementById("quoteDisplay");
 
-  // Update the DOM using innerHTML
-  quoteDisplay.innerHTML = `<p>"${randomQuote.text}"</p><p><strong>Category:</strong> ${randomQuote.category}</p>`;
+  // Clear existing content
+  quoteDisplay.innerHTML = "";
+
+  // Create elements for quote text and category
+  const quoteText = document.createElement("p");
+  quoteText.textContent = `"${randomQuote.text}"`;
+
+  const quoteCategory = document.createElement("p");
+  quoteCategory.innerHTML = `<strong>Category:</strong> ${randomQuote.category}`;
+
+  // Append elements to the quote display
+  quoteDisplay.appendChild(quoteText);
+  quoteDisplay.appendChild(quoteCategory);
 }
 
 // Function to create the form for adding quotes
 function createAddQuoteForm() {
-  const formHTML = `
-    <div>
-      <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
-      <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
-      <button id="addQuoteButton">Add Quote</button>
-    </div>
-  `;
+  // Create input elements for quote text and category
+  const inputText = document.createElement("input");
+  inputText.id = "newQuoteText";
+  inputText.type = "text";
+  inputText.placeholder = "Enter a new quote";
 
-  // Insert the form into the DOM
-  document.getElementById("addQuoteForm").innerHTML = formHTML;
+  const inputCategory = document.createElement("input");
+  inputCategory.id = "newQuoteCategory";
+  inputCategory.type = "text";
+  inputCategory.placeholder = "Enter quote category";
+
+  // Create the add quote button
+  const addButton = document.createElement("button");
+  addButton.id = "addQuoteButton";
+  addButton.textContent = "Add Quote";
+
+  // Append input fields and button to the form container
+  const formContainer = document.getElementById("addQuoteForm");
+  formContainer.appendChild(inputText);
+  formContainer.appendChild(inputCategory);
+  formContainer.appendChild(addButton);
 
   // Add event listener for the "Add Quote" button
-  document.getElementById("addQuoteButton").addEventListener("click", addQuote);
+  addButton.addEventListener("click", addQuote);
 }
 
 // Function to add a new quote
