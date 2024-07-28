@@ -197,8 +197,8 @@ async function syncQuotesWithServer() {
   populateCategories();
   showRandomQuote();
 
-  // Notify user about the sync
-  notifyUser("Quotes synchronized with server.");
+  // Notify user about the sync with the required message
+  notifyUser("Quotes synced with server!");
 }
 
 // Resolve conflicts between server and local quotes
@@ -222,7 +222,7 @@ function resolveConflicts(serverQuotes, localQuotes) {
   return Array.from(localQuotesMap.values());
 }
 
-// Notify users of updates
+// Notify users of updates or conflicts
 function notifyUser(message) {
   const notification = document.createElement("div");
   notification.style.position = "fixed";
@@ -238,7 +238,7 @@ function notifyUser(message) {
 
   setTimeout(() => {
     document.body.removeChild(notification);
-  }, 3000);
+  }, 3000); // Show notification for 3 seconds
 }
 
 // Fetch quotes from the server
